@@ -1,4 +1,4 @@
-import { call, put, debounce, all } from "@redux-saga/core/effects";
+import { call, put, takeEvery, all } from "@redux-saga/core/effects";
 import {FETCH_DATA, setData} from './actions';
 import {FetchDataActionType} from './types';
 import {fetchData, initialState} from './utils';
@@ -19,7 +19,7 @@ function* fetchDataSaga (action:FetchDataActionType){
 }
 
 function* watchFetchDataSaga (){
-    yield debounce(500,FETCH_DATA,fetchDataSaga)
+    yield takeEvery(FETCH_DATA,fetchDataSaga)
 }
 
 export default function* rootSaga (){

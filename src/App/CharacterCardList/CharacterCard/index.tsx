@@ -17,7 +17,7 @@ export const CharacterCard:React.FC<PropsType> = (props) => {
     const {character} = props;
 
     return <CharacterCardStyled onMouseEnter={handleOnMouseEnter} onMouseLeave={handleOnMouseLeave}>
-      <img src={character.image} />
+      <img src={character.image} alt=''/>
       {isInfoDisplayed && <CharacterInfo character={character} />}
     </CharacterCardStyled>
 }
