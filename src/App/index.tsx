@@ -1,15 +1,19 @@
-import React, {useEffect, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import {useDispatch, connect} from 'react-redux';
 import {fetchData} from './../state/actions';
 import {StateType} from './../state/types'
 import {PropsType} from './types'
 import {SearchBar} from './SearchBar';
 import {CharacterCardList} from './CharacterCardList';
-import {Pagination} from './Pagination'
+import {Pagination} from '@material-ui/lab';
+import {AppWrapperStyled} from './styles';
+
+const START_PAGE = 1;
+const IGNORE_FIRST_SYMBOLS_COUNT = 1;
 
 const App: React.FC<PropsType> = (props) => {  
   const dispatch = useDispatch();
-  const [page,setPage] = useState(1);
+  const [page,setPage] = useState(START_PAGE);
 
   useEffect(()=>{
     dispatch(fetchData(page));
@@ -18,24 +22,26 @@ const App: React.FC<PropsType> = (props) => {
   const {info,results} = props;
 
   const handleSearh = (searchBy: string) => {
-    dispatch(fetchData(page,searchBy));
+    if(searchBy.length>IGNORE_FIRST_SYMBOLS_COUNT || searchBy.length===0){
+      dispatch(fetchData(page,searchBy));
+    }
   }
 
-  const handleChangePage = (page: number) => {
+  const handleChangePage = (event: ChangeEvent<unknown>, page: number) => {
     setPage(page);
     dispatch(fetchData(page));
   }
 
   return (
-    <div>
+    <AppWrapperStyled>
       <SearchBar handleSearch={handleSearh}/>
       <CharacterCardList characterList={results}/>
-      <Pagination currentPage={page} totalPages={info.pages} changePage={handleChangePage}/>
-    </div>
+      <Pagination page={page} count={info.pages} onChange={handleChangePage}/>
+    </AppWrapperStyled>
   )
 }
 
-const mapStateToProps = (state:StateType) => {
+const mapStateToProps = (state:StateType):StateType => {
   return state
  }
 

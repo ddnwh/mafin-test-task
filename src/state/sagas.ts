@@ -1,7 +1,7 @@
-import { call, put, takeEvery, all } from "@redux-saga/core/effects";
+import { call, put, debounce, all } from "@redux-saga/core/effects";
 import {FETCH_DATA, setData} from './actions';
 import {FetchDataActionType} from './types';
-import {fetchData} from './utils';
+import {fetchData, initialState} from './utils';
 
 function* fetchDataSaga (action:FetchDataActionType){
     const {page,searchBy} = action;
@@ -9,13 +9,17 @@ function* fetchDataSaga (action:FetchDataActionType){
         let {data} = yield call(fetchData,page,searchBy);
         yield put(setData(data));
     }
-    catch (e) {
-        alert('oh no! a data fetching error!');
+    catch (err) {
+        if(err.response.status===404) {
+            yield put(setData(initialState));
+        } else {
+            alert('Data fetching error');
+        }
     }
 }
 
 function* watchFetchDataSaga (){
-    yield takeEvery(FETCH_DATA,fetchDataSaga)
+    yield debounce(500,FETCH_DATA,fetchDataSaga)
 }
 
 export default function* rootSaga (){

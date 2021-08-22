@@ -1,5 +1,6 @@
 import React, {useState} from "react";
-import {PropsType} from './types'
+import {PropsType} from './types';
+import {SearchInputStyled} from './styles';
 
 export const SearchBar:React.FC<PropsType> = (props) => {
     const [searchString,setSearchString] = useState('');
@@ -7,10 +8,10 @@ export const SearchBar:React.FC<PropsType> = (props) => {
     const {handleSearch} = props;
 
     const handleInputChange = (event:React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value
+        const value = event.target.value;
         setSearchString(value);
         handleSearch(value);
     }
     
-    return <input type="text" onChange={handleInputChange} value={searchString}/>
+    return <SearchInputStyled type="text" onChange={handleInputChange} value={searchString}/>
 }
