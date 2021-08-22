@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState, useCallback} from 'react';
 import {useDispatch, connect} from 'react-redux';
 import {fetchData} from './../state/actions';
 import {StateType} from './../state/types'
@@ -21,16 +21,16 @@ const App: React.FC<PropsType> = (props) => {
 
   const {info,results} = props;
 
-  const handleSearh = (searchBy: string) => {
+  const handleSearh = useCallback((searchBy: string) => {
     if(searchBy.length>IGNORE_FIRST_SYMBOLS_COUNT || searchBy.length===0){
       dispatch(fetchData(page,searchBy));
     }
-  }
+  },[dispatch,fetchData,page])
 
-  const handleChangePage = (event: ChangeEvent<unknown>, page: number) => {
+  const handleChangePage = useCallback((event: ChangeEvent<unknown>, page: number) => {
     setPage(page);
     dispatch(fetchData(page));
-  }
+  },[dispatch,fetchData])
 
   return (
     <AppWrapperStyled>
