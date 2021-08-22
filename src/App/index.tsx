@@ -24,8 +24,9 @@ const App: React.FC<PropsType> = (props) => {
 
   const handleSearh = useCallback((searchBy: string) => {
     if(searchBy.length>IGNORE_FIRST_SYMBOLS_COUNT || searchBy.length===0){
-      dispatch(fetchData(page,searchBy))
+      dispatch(fetchData(START_PAGE,searchBy))
     }
+    setPage(START_PAGE);
   },[dispatch,page]);
 
   const debouncedHandleSearch = debounce(handleSearh,500);
